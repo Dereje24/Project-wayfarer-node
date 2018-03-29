@@ -6,9 +6,9 @@ var seedUsers = require('../seed/users')
 
 module.exports = {
   index: function index(req, res) {
-    User.find(function (err, allUsers) {
+    User.find({}, function (err, allUsers) {
       err ? res.status(500).json({ error: err.message}) :
-      res.json({books: allUsers})
+      res.json({users: allUsers})
     });
   },
 
