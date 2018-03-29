@@ -23,5 +23,4 @@ module.exports =[
     password: '123',
     image: 'String'
   }
-
 ]

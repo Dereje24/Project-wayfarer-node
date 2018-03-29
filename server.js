@@ -1,38 +1,40 @@
 var express = require('express'),
     app = express(),
     bodyParser = require('body-parser'),
-    mongoose = require('mongoose');
+    mongoose = require('mongoose'),
+    db = require('./models/index');
 
 // serve static files from public folder
 app.use(express.static(__dirname + '/public'));
 
-var ctrl = require('./controllers');
+var usersCtrl = require('./controllers/usersCtrl');
+var postsCtrl = require('./controllers/postsCtrl');
 
-app.route('/locations').get(ctrl.locations.index)
-    .post(ctrl.locations.create);
-
-app.route('/locations/:locationId')
-    .get(ctrl.locations.show);
+// app.route('/locations').get(ctrl.locations.index)
+//     .post(ctrl.locations.create);
+//
+// app.route('/locations/:locationId')
+//     .get(ctrl.locations.show);
 
 //POST ROUTES
-app.route('./posts')
-   .get(ctrl.posts.index)
-   .post(ctrl.posts.create);
+app.route('/posts')
+   .get(postsCtrl.index)
+   .post(postsCtrl.create);
 
 app.route('/posts/:postId')
-    .get(ctrl.posts.show)
-    .put(ctrl.posts.update)
-    .delete(ctrl.posts.destroy);
+    .get(postsCtrl.show)
+    .put(postsCtrl.update)
+    .delete(postsCtrl.destroy);
 
 //USER ROUTES
-app.route('./users')
-   .get(ctrl.users.index)
-   .post(ctrl.users.create);
+app.route('/users')
+   .get(usersCtrl.index)
+   .post(usersCtrl.create);
 
-app.route('./:userId')
-   .get(ctrl.users.show)
-   .put(ctrl.users.update)
-   .delete(ctrl.users.destroy);
+app.route('/:userId')
+   .get(usersCtrl.show)
+   .put(usersCtrl.update)
+   .delete(usersCtrl.destroy);
 
 
 app.listen(process.env.PORT || 3000, function(){
