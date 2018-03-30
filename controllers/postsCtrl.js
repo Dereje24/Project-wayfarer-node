@@ -1,7 +1,7 @@
 var db = require('../models');
 var Post = db.Post;
 var util = require('./utils');
-var seedPosts = require('../seed/posts');
+//var seedPosts = require('../seed/posts');
 
 
 module.exports = {
@@ -35,3 +35,4 @@ module.exports = {
     var updatePost = req.body;
     Post.findOneAndUpdate({ _id: postId}, req.body, { new: true }, util.getSingularResponse.bind(res));
   }
+};
