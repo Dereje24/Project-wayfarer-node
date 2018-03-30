@@ -3,7 +3,7 @@ var Location = require('./location');
 var Post = require('./post');
 var User = require('./user');
 
-mongoose.connect('mongodb://localhost/wayfarer');
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/wayfarer');
 
 module.exports = {
   User: User,
