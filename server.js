@@ -15,6 +15,36 @@ var postsCtrl = require('./controllers/postsCtrl');
 //
 // app.route('/locations/:locationId')
 //     .get(ctrl.locations.show);
+
+app.get('/api/users', function(req, res) {
+  db.User.find().populate('user')
+  .exec(function(err, users){
+    if(err){
+      return console.log(err);
+    }
+    res.send(users);
+  })
+});
+
+app.get('/api/users/:id', function(req, res){
+  db.User.findOne({_id: req.params.id}, function(err, user){
+    res.send(user);
+  });
+});
+
+app.get('/api/locations', function(req, res){
+  db.Location.find()
+  .exec(function(err, locations){
+    if(err){
+      return console.log(err);
+    }
+    res.send(locations);
+  });
+});
+
+
+
+
 app.post('/api/users', function(req, res) {
   var user = new db.User(req.body);
   user.save(function(err) {
@@ -22,12 +52,15 @@ app.post('/api/users', function(req, res) {
     console.log('Saved: ' + user)
   })
   res.send(user)
-})
 
-// app.post('/api/locations', function(req, res) {
-//   console.log('testing locations route');
-//   var
-// })
+db.User.findOne({firstName: req.body.user}, function(err, user){
+  if(err) {
+    return console.log(err);
+  };
+});
+});
+
+
 //POST ROUTES
 app.route('/posts')
    .get(postsCtrl.index)
