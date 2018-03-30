@@ -1,9 +1,11 @@
 var mongoose = require('mongoose'),
-    Schema  = mongoose.Schema;
+    Schema  = mongoose.Schema,
+    Post = require('./post');
 
 var LocationSchema = new Schema({
     title: String,
-    post: String
+    image: String,
+    post: [{type: Schema.Type.ObjectId, ref: 'Post'}]
 })
 
 var Location = mongoose.model('Location', LocationSchema);

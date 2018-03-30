@@ -15,7 +15,19 @@ var postsCtrl = require('./controllers/postsCtrl');
 //
 // app.route('/locations/:locationId')
 //     .get(ctrl.locations.show);
+app.post('/api/users', function(req, res) {
+  var user = new db.User(req.body);
+  user.save(function(err) {
+    if (err) { console.err(err); }
+    console.log('Saved: ' + user)
+  })
+  res.send(user)
+})
 
+// app.post('/api/locations', function(req, res) {
+//   console.log('testing locations route');
+//   var
+// })
 //POST ROUTES
 app.route('/posts')
    .get(postsCtrl.index)

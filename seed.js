@@ -1,19 +1,17 @@
 var db = require('./models/index');
 var faker = require('faker');
-var count = process.argv[5];
+var bodyParser = require('body-parser');
+var count = process.argv[5] || 5;
 
-
-db.User.remove({}, function() {
-  console.log('DB cleared')
-}).then(function(res){
-  for (var i = 0; i < count; i++) {
-    var user = new db.user({firstName: faker.firstName(), lastName: faker.lastName(), password: faker.password()});
-    user.save(function(err){
-      console.log(err);
-      process.exit(0);
-      return
-    });
-  }
-  console.log('seeding complete');
-  process.exit(0);
+console.log("hello!")
+db.User.remove({}, function(err, users){
+  console.log("removed all users!")
+  db.User.create({firstName: faker.name.firstName(), lastName: faker.name.lastName(), password: faker.internet.password(), image: "hi"}, function(err, success){
+    if(err){
+      console.log("there was an error!", err)
+      return;
+    }
+    console.log("created a user!", success)
+  })
+console.log("Seed complete");
 });
