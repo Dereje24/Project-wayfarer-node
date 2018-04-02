@@ -107,7 +107,7 @@ locations.forEach(function(locationData){
       console.log('Error finding loation', err);
     }
     local.posts = foundPost;
-
+    console.log('local.post on 110', local.posts);
     local.save(function(err, savedLocal){
       if(err){
         return console.log(err);

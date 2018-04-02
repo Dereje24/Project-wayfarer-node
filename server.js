@@ -2,7 +2,9 @@ var express = require('express'),
     app = express(),
     bodyParser = require('body-parser'),
     mongoose = require('mongoose'),
-    db = require('./models/index');
+    db = require('./models/index'),
+    passport = require('passport'),
+    LocalStrategy = require('passport-local').Strategy;
 
 // serve static files from public folder
 app.use(express.static(__dirname + '/public'));
@@ -33,7 +35,7 @@ app.get('/api/users/:id', function(req, res){
 });
 
 app.get('/api/locations', function(req, res){
-  db.Location.find()
+  db.Location.find().populate('locations')
   .exec(function(err, locations){
     if(err){
       return console.log(err);
