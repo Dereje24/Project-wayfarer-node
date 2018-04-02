@@ -47,11 +47,33 @@ app.get('/logout', function (req, res) {
   console.log("AFTER logout", req);
 });
 
-// app.route('/locations').get(ctrl.locations.index)
-//     .post(ctrl.locations.create);
-//
-// app.route('/locations/:locationId')
-//     .get(ctrl.locations.show);
+// create new posts
+app.post('/api/posts', function (req, res) {
+  var newPost = new db.Post({
+    title: req.body.title,
+    description: req.body.description,
+    location: req.body.location
+  });
+  console.log(newPost);
+  newPost.save(function(err, post) {
+    if (err) {
+      return console.log("save error: " + err);
+    }
+    console.log("saved", post.title);
+    res.send(post);
+  });
+});
+
+// delete post
+app.delete('/api/posts/:id', function (req, res) {
+  console.log('posts delete', req.params);
+  var postId = req.params.id;
+  console.log('line 71 server.js', postId)
+  db.Post.findOneAndRemove({ _id: postId })
+  .exec(function (err, deletePost) {
+    res.send(deletePost);
+  });
+});
 
 app.get('/api/users', function(req, res) {
   db.User.find().populate('user')

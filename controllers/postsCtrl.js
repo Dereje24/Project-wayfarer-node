@@ -8,7 +8,7 @@ module.exports = {
   index: function index(req, res) {
     Post.find(function (err, allPosts) {
       err ? res.status(500).json({ error: err.message}) :
-      res.json({books: allPosts})
+      res.json({posts: allPosts})
     });
   },
 
