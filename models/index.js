@@ -5,6 +5,8 @@ var User = require('./user');
 
 mongoose.connect('mongodb://localhost/wayfarer', {promiseLibrary: global.Promise});
 
+// mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/wayfarer');
+
 module.exports = {
   User: User,
   Post: Post,
