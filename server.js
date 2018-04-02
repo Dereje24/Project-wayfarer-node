@@ -37,8 +37,8 @@ app.post('/signup', function signup(req,res) {
     }
 )});
 app.post('/login', passport.authenticate('local'), function (req, res) {
-  console.log(JSON.stringify(req.user));
-  res.send(req);
+  //console.log(JSON.stringify(req.user));
+  res.send(req.user);
 });
 app.get('/logout', function (req, res) {
   console.log("BEFORE logout", req);
