@@ -6,7 +6,7 @@ var PostSchema = new Schema({
     {
       type: Schema.Types.ObjectId,
       ref: 'User'
-    }
+    },
     title: String,
     description: String,
     location: String

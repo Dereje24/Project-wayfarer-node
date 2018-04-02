@@ -4,13 +4,48 @@ var express = require('express'),
     mongoose = require('mongoose'),
     db = require('./models/index'),
     passport = require('passport'),
+    session = require('express-session'),
     LocalStrategy = require('passport-local').Strategy;
 
+var User = db.User;
 // serve static files from public folder
 app.use(express.static(__dirname + '/public'));
-
+app.use(bodyParser.urlencoded({ extended: true })); // req.body
 var usersCtrl = require('./controllers/usersCtrl');
 var postsCtrl = require('./controllers/postsCtrl');
+var indexCtrl = require('./controllers/index');
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+//passport config
+
+passport.use(new LocalStrategy(db.User.authenticate()));
+passport.serializeUser(db.User.serializeUser());
+passport.deserializeUser(db.User.deserializeUser());
+
+// auth routes
+app.get('/api/users', usersCtrl.index);
+app.delete('/api/users/:user_id', usersCtrl.destroy);
+app.post('/signup', function signup(req,res) {
+  console.log(`${req.body.username} ${req.body.password}`);
+  User.register(new User({ username: req.body.username }), req.body.password,
+    function (err, newUser) {
+      passport.authenticate('local')(req, res, function() {
+        res.send(newUser);
+      });
+    }
+)});
+app.post('/login', passport.authenticate('local'), function (req, res) {
+  console.log(JSON.stringify(req.user));
+  res.send(req);
+});
+app.get('/logout', function (req, res) {
+  console.log("BEFORE logout", req);
+  req.logout();
+  res.send(req);
+  console.log("AFTER logout", req);
+});
 
 // app.route('/locations').get(ctrl.locations.index)
 //     .post(ctrl.locations.create);
