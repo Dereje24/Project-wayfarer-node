@@ -47,6 +47,61 @@ app.get('/logout', function (req, res) {
   console.log("AFTER logout", req);
 });
 
+// USERS
+// Find one User
+app.get('/api/users/:id', function(req, res){
+  db.User.findOne({_id: req.params.id}, function(err, user){
+    res.send(user);
+  });
+});
+//
+app.post('/api/users', function(req, res) {
+  var user = new db.User(req.body);
+  user.save(function(err) {
+    if (err) { console.err(err); }
+    console.log('Saved: ' + user)
+  })
+  res.send(user)
+
+// db.User.findOne({firstName: req.body.user}, function(err, user){
+//   if(err) {
+//     return console.log(err);
+//   };
+// });
+});
+
+// Find all Users
+app.get('/api/users', function(req, res) {
+  db.User.find().populate('user')
+  .exec(function(err, users){
+    if(err){
+      return console.log(err);
+    }
+    res.send(users);
+  })
+});
+
+// Delete user - Will get back to this..*
+// app.delete('/api/users/:id', function(req, res) {
+//   console.log('user delete', req.params);
+//   var userId = req.params.id;
+//   db.User.findOneAndRemove({ _id: userId })
+//     .exec(function (err, deletedUser) {
+//       res.send(deletedUser);
+//     });
+// });
+
+// Edit User
+
+app.put('/api/users/:id', function(req, res) {
+  var userId = req.params.id;
+  db.User.findOneAndUpdate({_id: userId}, req.body, {new: true})
+  .populate('user')
+  .exec(function (err, updatedUser) {
+    res.send(updatedUser);
+  });
+});
+
 // create new posts
 app.post('/api/posts', function (req, res) {
   var newPost = new db.Post({
@@ -68,29 +123,26 @@ app.post('/api/posts', function (req, res) {
 app.delete('/api/posts/:id', function (req, res) {
   console.log('posts delete', req.params);
   var postId = req.params.id;
-  console.log('line 71 server.js', postId)
   db.Post.findOneAndRemove({ _id: postId })
   .exec(function (err, deletePost) {
     res.send(deletePost);
   });
 });
 
-app.get('/api/users', function(req, res) {
-  db.User.find().populate('user')
-  .exec(function(err, users){
-    if(err){
-      return console.log(err);
-    }
-    res.send(users);
-  })
+//update post
+app.put('/api/posts/:id', function (req, res) {
+  console.log('posts edit', req.params);
+  console.log('body is', req.body);
+  var postId = req.params.id;
+
+  db.Post.findOneAndUpdate({ _id: postId }, req.body, {new: true})
+    .populate('post')
+    .exec(function (err, updatePost) {
+      res.send(updatePost);
+    });
 });
 
-app.get('/api/users/:id', function(req, res){
-  db.User.findOne({_id: req.params.id}, function(err, user){
-    res.send(user);
-  });
-});
-
+// FIND LOCATIONS
 app.get('/api/locations', function(req, res){
   db.Location.find().populate('locations')
   .exec(function(err, locations){
@@ -99,24 +151,6 @@ app.get('/api/locations', function(req, res){
     }
     res.send(locations);
   });
-});
-
-
-
-
-app.post('/api/users', function(req, res) {
-  var user = new db.User(req.body);
-  user.save(function(err) {
-    if (err) { console.err(err); }
-    console.log('Saved: ' + user)
-  })
-  res.send(user)
-
-db.User.findOne({firstName: req.body.user}, function(err, user){
-  if(err) {
-    return console.log(err);
-  };
-});
 });
 
 
